@@ -5,6 +5,8 @@ import com.example.demo.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class CarService {
     private CarRepository carRepository;
@@ -14,7 +16,7 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
-    public Car add(Car car) {
+    public Car addCar(Car car) {
         if (car.getVin() == null || car.getModelYear() < 1900) {
             throw new RuntimeException();
         }
@@ -22,5 +24,9 @@ public class CarService {
             throw new RuntimeException();
         }
         return carRepository.save(car);
+    }
+
+    public ArrayList<Car> findCar() {
+        return new ArrayList<>();
     }
 }

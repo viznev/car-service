@@ -32,6 +32,8 @@ public class CarServiceTest {
 
     /*
 
+    POST / Create
+
     returns not Null & returns a Car
     givenCarWithoutVin thenThrowException
     givenCarModelYearLessThan1900 thenThrowException
@@ -40,59 +42,83 @@ public class CarServiceTest {
      */
 
     @Test
-    public void givenValidCar_whenAddIsCalled_thenDoesNotReturnNull() {
+    public void givenValidCar_whenAddCarIsCalled_thenDoesNotReturnNull() {
         // Arrange
         Car car = initializeCar();
         when(carRepository.save(car)).thenReturn(car);
 
         // Act
-        Car actual = carService.add(car);
+        Car actual = carService.addCar(car);
 
         // Assert
         assertNotNull(actual);
     }
 
     @Test
-    public void givenCarWithoutVin_whenAddIsCalled_thenThrowException() {
+    public void givenCarWithoutVin_whenAddCarIsCalled_thenThrowException() {
         // Arrange
         Car car = initializeCar();
         car.setVin(null);
 
         // Act/Assert
-        assertThrows(RuntimeException.class, () -> carService.add(car));
+        assertThrows(RuntimeException.class, () -> carService.addCar(car));
     }
 
     @Test
-    public void givenModelYearLessThan1900_whenAddIsCalled_thenThrowException() {
+    public void givenModelYearLessThan1900_whenAddCarIsCalled_thenThrowException() {
         // Arrange
         Car car = initializeCar();
         car.setModelYear(1899);
 
         // Act/Assert
-        assertThrows(RuntimeException.class, () -> carService.add(car));
+        assertThrows(RuntimeException.class, () -> carService.addCar(car));
     }
 
     @Test
-    public void givenValidCar_whenAddIsCalled_thenReturnCarFromRepository() {
+    public void givenValidCar_whenAddCarIsCalled_thenReturnCarFromRepository() {
         // Arrange
         Car car = initializeCar();
         Car expected = new Car();
         when(carRepository.save(car)).thenReturn(expected);
 
         // Act
-        Car actual = carService.add(car);
+        Car actual = carService.addCar(car);
 
         // Assert
         assertEquals(expected, actual);
     }
 
     @Test
-    public void givenCarWithVinAlreadyInRepo_whenAddIsCalled_thenThrowException() {
+    public void givenCarWithVinAlreadyInRepo_whenAddCarIsCalled_thenThrowException() {
         // Arrange
         Car car = initializeCar();
         when(carRepository.findById(car.getVin())).thenReturn(Optional.of(car));
 
         // Act/Assert
-        assertThrows(RuntimeException.class, () -> carService.add(car));
+        assertThrows(RuntimeException.class, () -> carService.addCar(car));
     }
+
+    /*
+
+    GET / Read
+
+    givenValidCar_doesNotReturnNull/returnsCar
+    givenNoVin_returnsListOfCars
+    givenVinDoesNotExistInRepo_thenThrowException
+
+    findAll:
+    givenAnyCar_whenAddIsCalled
+    calling service
+    not null
+    returns lists
+    get all returns nothing from db b/c nothing exists
+
+    findById:
+    not null
+    is car
+    calls service
+    noVIN throw exception
+
+
+     */
 }
