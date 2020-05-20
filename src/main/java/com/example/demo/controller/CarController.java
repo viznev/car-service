@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/cars")
@@ -21,25 +20,22 @@ public class CarController {
         this.carService = carService;
     }
 
-    /*@PostMapping
+    /*
+    @PostMapping
     public Car add(@RequestBody Car car) {
         return carService.add(car);
-    }*/
+    }
+    */
 
     public Car addCar(Car car) {
         return carService.addCar(car);
     }
 
-    public List<Car> findCar() {
+    public ArrayList<Car> findCar() {
         try {
             return carService.findCar();
         } catch (CarNotFoundException e) {
             throw new ServerException();
         }
     }
-
-    /*public List<Car> findCar(String vin) {
-        carService.findCar(vin);
-        return new ArrayList<Car>();
-    }*/
 }

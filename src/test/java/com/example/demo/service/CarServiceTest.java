@@ -97,28 +97,4 @@ public class CarServiceTest {
         // Act/Assert
         assertThrows(RuntimeException.class, () -> carService.addCar(car));
     }
-
-    /*
-
-    GET / Read
-
-    givenValidCar_doesNotReturnNull/returnsCar
-    givenNoVin_returnsListOfCars
-    givenVinDoesNotExistInRepo_thenThrowException
-
-    findAll:
-    givenAnyCar_whenAddIsCalled
-    calling service
-    not null
-    returns lists
-    get all returns nothing from db b/c nothing exists
-
-    findById:
-    not null
-    is car
-    calls service
-    noVIN throw exception
-
-
-     */
 }
