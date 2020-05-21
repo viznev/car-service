@@ -38,4 +38,12 @@ public class CarController {
             throw new ServerException();
         }
     }
+
+    public Car findCar(String vin) {
+        try {
+            return carService.findCar(vin);
+        } catch (CarNotFoundException e) {
+            throw new ServerException();
+        }
+    }
 }

@@ -68,31 +68,16 @@ public class CarControllerTest {
         assertEquals(expected, actual);
     }
 
-        /*
-        GET / Read
-        if given a vin:
-            if vin in repo:
-                return car object
-            else:
-                throwCarNotFoundException
+    /*
+    GET / Read
+    if given a vin:
+        if vin in repo:
+            return car object
         else:
-            return all cars in repo
-
-        if given a vin:
-            givenAVin
-                thenDoesNotReturnNull
-                thenReturnsCar
-                thenCarServiceFindCarIsCalled
-                thenCarReturnedFromService
-            givenNoVinMatchFoundInRepo_thenThrowCarNotFoundException
-        if not given a vin:
-            givenNoVin
-                thenDoesNotReturnNull(&ReturnsTypeArrayListCar)
-                thenCarServiceFindCarIsCalled
-                thenArrayListOfCarsReturned
-            givenNoVinAndNoCarsInRepo_thenThrowCarNotFoundException
-
-         */
+            throwCarNotFoundException
+    else:
+        return all cars in repo
+     */
 
     @Test
     public void givenNoVin_whenFindCarIsCalled_thenDoesNotReturnNull() {
@@ -130,7 +115,7 @@ public class CarControllerTest {
     }
 
     @Test
-    public void givenNoVinAndNoCarsInRepo_whenFindCarIsCalled_thenThrowCarNotFoundException() {
+    public void givenNoVinAndNoCarsInRepo_whenFindCarIsCalled_thenThrowServerException() {
         // Arrange
         when(carService.findCar()).thenThrow(new CarNotFoundException());
 
@@ -138,39 +123,53 @@ public class CarControllerTest {
         assertThrows(ServerException.class, () -> this.carController.findCar());
     }
 
-    /*@Test
-    public void givenAnyVinValue_whenFindCarIsCalled_thenDoesNotReturnNull() {
+    @Test
+    public void givenAVin_whenFindCarIsCalled_thenDoesNotReturnNull() {
         // Arrange
-        String vin = "";
+        String vin = "vin1";
+        Car expected = new Car();
+        when(carService.findCar(vin)).thenReturn(expected);
 
         // Act
-        List<Car> actual = carController.findCar(vin);
+        Car actual = carController.findCar(vin);
 
         // Assert
         assertNotNull(actual);
     }
 
     @Test
-    public void givenAnyVinValue_whenFindCarIsCalled_thenReturnsArrayList() {
+    public void givenAVin_whenFindCarIsCalled_thenCarServiceFindCarIsCalled() {
         // Arrange
-        String vin = "";
+        String vin = "vin1";
 
         // Act
-        List<Car> actual = carController.findCar(vin);
-
-        // Assert
-        assertTrue(actual instanceof ArrayList);
-    }
-
-    @Test
-    public void givenAnyVinValue_whenFindCarIsCalled_thenServiceMethodShouldBeCalled() {
-        // Arrange
-        String vin = "";
-
-        // Act
-        List<Car> actual = carController.findCar(vin);
+        Car actual = carController.findCar(vin);
 
         // Assert
         verify(carService).findCar(vin);
-    }*/
+    }
+
+    @Test
+    public void givenAVin_whenFindCarIsCalled_thenReturnsCar() {
+        // Arrange
+        String vin = "vin1";
+        Car expected = new Car("vin1", "Honda", 2008, "Grey");
+        when(carService.findCar(vin)).thenReturn(expected);
+
+        // Act
+        Car actual = carController.findCar(vin);
+
+        // Assert
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void givenNoVinMatchFoundInRepo_whenFindCarIsCalled_thenThrowServerException() {
+        // Arrange
+        String vin = "vin1";
+        when(carService.findCar(vin)).thenThrow(new CarNotFoundException());
+
+        // Act/Assert
+        assertThrows(ServerException.class, () -> this.carController.findCar(vin));
+    }
 }

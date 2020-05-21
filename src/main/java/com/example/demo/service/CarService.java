@@ -27,6 +27,10 @@ public class CarService {
     }
 
     public ArrayList<Car> findCar() {
-        return new ArrayList<>();
+        return null;
+    }
+
+    public Car findCar(String vin) {
+        return null;
     }
 }
