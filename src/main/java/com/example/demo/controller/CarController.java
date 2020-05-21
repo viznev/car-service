@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/cars")
@@ -31,7 +31,7 @@ public class CarController {
         return carService.addCar(car);
     }
 
-    public ArrayList<Car> findCar() {
+    public List<Car> findCar() {
         try {
             return carService.findCar();
         } catch (CarNotFoundException e) {

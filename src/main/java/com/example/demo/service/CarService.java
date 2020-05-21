@@ -1,11 +1,12 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.CarNotFoundException;
 import com.example.demo.model.Car;
 import com.example.demo.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CarService {
@@ -26,8 +27,12 @@ public class CarService {
         return carRepository.save(car);
     }
 
-    public ArrayList<Car> findCar() {
-        return null;
+    public List<Car> findCar() {
+        List<Car> results = carRepository.findAll();
+        if (results.isEmpty()) {
+            throw new CarNotFoundException();
+        }
+        return results;
     }
 
     public Car findCar(String vin) {

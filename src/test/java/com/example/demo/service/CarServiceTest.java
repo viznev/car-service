@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.CarNotFoundException;
 import com.example.demo.model.Car;
 import com.example.demo.repository.CarRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,9 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class CarServiceTest {
@@ -28,6 +32,15 @@ public class CarServiceTest {
         car.setVin("vin1");
         car.setModelYear(1900);
         return car;
+    }
+
+    private List<Car> initCarList() {
+        Car car1 = new Car("vin1", "Honda", 2008, "Grey");
+        Car car2 = new Car("vin2", "Toyota", 2014, "white");
+        List<Car> carList = new ArrayList<>();
+        carList.add(car1);
+        carList.add(car2);
+        return carList;
     }
 
     /*
@@ -96,5 +109,79 @@ public class CarServiceTest {
 
         // Act/Assert
         assertThrows(RuntimeException.class, () -> carService.addCar(car));
+    }
+
+    /*
+    GET / Read
+    if given a vin:
+        if vin in repo:
+            return car object
+        else:
+            throwCarNotFoundException
+    else if not given a vin and there are cars in the repo:
+        return all cars in repo
+    else (if no cars in repo):
+        throwCarNotFoundException
+
+        vin:
+            returnsNotNull&typeCar
+            carRepository.findById(vin) is called
+            returnsCarFromRepo
+            ifVinNotInRepoThrowsException
+
+        noVin:
+            returnsNotNull&typeArrayListCar
+            carRepository.findAll() is called
+            listOfCarsFromRepo
+            noCarsInRepoThrowsException
+     */
+
+    @Test
+    public void givenNoVin_whenFindCarIsCalled_thenDoesNotReturnNull() {
+        // Arrange
+        List<Car> expected = initCarList();
+        when(carRepository.findAll()).thenReturn(expected);
+
+        // Act
+        List<Car> actual = carService.findCar();
+
+        // Assert
+        assertNotNull(actual);
+    }
+
+    @Test
+    public void givenNoVin_whenFindCarIsCalled_thenCarRepositoryFindAllIsCalled() {
+        // Arrange
+        List<Car> expected = initCarList();
+        when(carRepository.findAll()).thenReturn(expected);
+
+        // Act
+        List<Car> actual = carService.findCar();
+
+        // Assert
+        verify(carRepository).findAll();
+    }
+
+    @Test
+    public void givenNoVin_whenFindCarIsCalled_thenCarRepositoryReturnsListOfCars() {
+        // Arrange
+        List<Car> expected = initCarList();
+        when(carRepository.findAll()).thenReturn(expected);
+
+        // Act
+        List<Car> actual = carService.findCar();
+
+        // Assert
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void givenNoVinAndNoCarsInRepo_whenFindCarIsCalled_thenThrowCarNotFoundException() {
+        // Arrange
+        List<Car> expected = new ArrayList<>();
+        when(carRepository.findAll()).thenReturn(expected);
+
+        // Act/Assert
+        assertThrows(CarNotFoundException.class, () -> this.carService.findCar());
     }
 }

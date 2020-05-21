@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
@@ -74,15 +75,17 @@ public class CarControllerTest {
         if vin in repo:
             return car object
         else:
-            throwCarNotFoundException
-    else:
+            throwServerException
+    else if not given a vin and there are cars in the repo:
         return all cars in repo
+    else (if no cars in repo):
+        throwServerException
      */
 
     @Test
     public void givenNoVin_whenFindCarIsCalled_thenDoesNotReturnNull() {
         // Act
-        ArrayList<Car> actual = carController.findCar();
+        List<Car> actual = carController.findCar();
 
         // Assert
         assertNotNull(actual);
@@ -98,17 +101,17 @@ public class CarControllerTest {
     }
 
     @Test
-    public void givenNoVin_whenFindCarIsCalled_thenArrayListOfCarsReturned() {
+    public void givenNoVin_whenFindCarIsCalled_thenListOfCarsReturned() {
         // Arrange
         Car car1 = new Car("vin1", "Hyundai", 2015, "blue");
         Car car2 = new Car("vin2", "Toyota", 2014, "white");
-        ArrayList<Car> expected = new ArrayList<>();
+        List<Car> expected = new ArrayList<>();
         expected.add(car1);
         expected.add(car2);
         when(carService.findCar()).thenReturn(expected);
 
         // Act
-        ArrayList<Car> actual = carController.findCar();
+        List<Car> actual = carController.findCar();
 
         // Assert
         assertEquals(expected, actual);
