@@ -184,4 +184,55 @@ public class CarServiceTest {
         // Act/Assert
         assertThrows(CarNotFoundException.class, () -> this.carService.findCar());
     }
+
+    @Test
+    public void givenAVin_whenFindCarIsCalled_thenDoesNotReturnNull() {
+        // Arrange
+        String vin = "vin1";
+        Car expected = new Car("vin1", "Honda", 2008, "Grey");
+        when(carRepository.findById(vin)).thenReturn(Optional.of(expected));
+
+        // Act
+        Car actual = carService.findCar(vin);
+
+        // Assert
+        assertNotNull(actual);
+    }
+
+    @Test
+    public void givenAVin_whenFindCarIsCalled_thenFindByIdIsCalled() {
+        // Arrange
+        String vin = "vin1";
+        Car expected = new Car("vin1", "Honda", 2008, "Grey");
+        when(carRepository.findById(vin)).thenReturn(Optional.of(expected));
+
+        // Act
+        Car actual = carService.findCar(vin);
+
+        // Assert
+        verify(carRepository).findById(vin);
+    }
+
+    @Test
+    public void givenAVin_whenFindCarIsCalled_thenShouldReturnCarFromRepo() {
+        // Arrange
+        String vin = "vin1";
+        Car expected = new Car("vin1", "Honda", 2008, "Grey");
+        when(carRepository.findById(vin)).thenReturn(Optional.of(expected));
+
+        // Act
+        Car actual = carService.findCar(vin);
+
+        // Assert
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void givenAVinNotFoundInRepo_whenFindCarIsCalled_thenThrowCarNotFoundException() {
+        // Arrange
+        String vin = "vin1";
+
+        // Act/Assert
+        assertThrows(CarNotFoundException.class, () -> this.carService.findCar(vin));
+    }
 }

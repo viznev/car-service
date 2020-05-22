@@ -36,6 +36,6 @@ public class CarService {
     }
 
     public Car findCar(String vin) {
-        return null;
+        return carRepository.findById(vin).orElseThrow(() -> new CarNotFoundException());
     }
 }
