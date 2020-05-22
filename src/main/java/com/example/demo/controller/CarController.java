@@ -5,8 +5,7 @@ import com.example.demo.exception.ServerException;
 import com.example.demo.model.Car;
 import com.example.demo.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,17 +19,12 @@ public class CarController {
         this.carService = carService;
     }
 
-    /*
     @PostMapping
-    public Car add(@RequestBody Car car) {
-        return carService.add(car);
-    }
-    */
-
-    public Car addCar(Car car) {
+    public Car addCar(@RequestBody Car car) {
         return carService.addCar(car);
     }
 
+    @GetMapping
     public List<Car> findCar() {
         try {
             return carService.findCar();
@@ -39,7 +33,8 @@ public class CarController {
         }
     }
 
-    public Car findCar(String vin) {
+    @GetMapping("/{vin}")
+    public Car findCar(@PathVariable String vin) {
         try {
             return carService.findCar(vin);
         } catch (CarNotFoundException e) {
