@@ -38,4 +38,7 @@ public class CarService {
     public Car findCar(String vin) {
         return carRepository.findById(vin).orElseThrow(() -> new CarNotFoundException());
     }
+
+    public void deleteCar(String vin) {
+    }
 }

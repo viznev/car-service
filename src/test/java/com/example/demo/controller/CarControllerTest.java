@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class CarControllerTest {
     private CarController carController;
@@ -174,5 +173,52 @@ public class CarControllerTest {
 
         // Act/Assert
         assertThrows(ServerException.class, () -> this.carController.findCar(vin));
+    }
+
+    /*
+    DELETE
+    if given a vin
+        if vin in repo:
+            delete the entity
+        else:
+            throwServerException
+    else:
+        throwServerException
+
+    givenNoVin_whenDeleteCarIsCalled_thenThrowServerException
+    givenAVin_thenCallsServiceMethod
+    givenAVinThatDoesNotExistInRepo_thenThrowServerException
+    (givenAVinThatExistsInRepo_thenDeletesEntity)
+     */
+
+    @Test
+    public void givenNoVin_whenDeleteCarIsCalled_thenThrowServerException() {
+        // Arrange
+        String vin = "";
+
+        // Assert
+        assertThrows(ServerException.class, () -> this.carController.deleteCar(vin));
+    }
+
+    @Test
+    public void givenAVin_whenDeleteCarIsCalled_thenCarServiceDeleteCarIsCalled() {
+        // Arrange
+        String vin = "vin1";
+
+        // Act
+        carController.deleteCar(vin);
+
+        // Assert
+        verify(carService).deleteCar(vin);
+    }
+
+    @Test
+    public void givenAVinThatDoesNotExistInRepo_whenDeleteCarIsCalled_thenThrowServerException() {
+        // Arrange
+        String vin = "vin42423";
+        doThrow(CarNotFoundException.class).when(carService).deleteCar(vin);
+
+        // Act/Assert
+        assertThrows(ServerException.class, () -> this.carController.deleteCar(vin));
     }
 }

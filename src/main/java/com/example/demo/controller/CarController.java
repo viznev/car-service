@@ -41,4 +41,15 @@ public class CarController {
             throw new ServerException();
         }
     }
+
+    public void deleteCar(String vin) {
+        if (vin.isEmpty()) {
+            throw new ServerException();
+        }
+        try {
+            carService.deleteCar(vin);
+        } catch (CarNotFoundException e) {
+            throw new ServerException();
+        }
+    }
 }
