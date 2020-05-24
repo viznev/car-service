@@ -221,4 +221,69 @@ public class CarControllerTest {
         // Act/Assert
         assertThrows(ServerException.class, () -> this.carController.deleteCar(vin));
     }
+
+    /*
+    PATCH / Update
+    if given a car:
+        if vin in repo:
+            update repo object w/ new object
+            return updated object
+        else:
+            throw ServerException
+    else:
+        throw ServerException
+
+    givenACar_thenDoesNotReturnNull
+    givenACar_thenServiceMethodShouldBeCalledWithCar
+    givenACar_thenShouldReturnCarFromService
+    givenACarThatDoesNotExistInRepo_thenThrowServerException
+     */
+
+    @Test
+    public void givenACar_whenUpdateCarIsCalled_thenDoesNotReturnNull() {
+        // Arrange
+        Car expected = new Car("vin1", "Honda", 2008, "Green");
+        when(carService.updateCar(expected)).thenReturn(expected);
+
+        // Act
+        Car actual = carController.updateCar(expected);
+
+        // Assert
+        assertNotNull(actual);
+    }
+
+    @Test
+    public void givenACar_whenUpdateCarIsCalled_thenServiceMethodShouldBeCalledWithCar() {
+        // Arrange
+        Car expected = new Car("vin1", "Honda", 2008, "Green");
+
+        // Act
+        Car actual = carController.updateCar(expected);
+
+        // Assert
+        verify(carService).updateCar(expected);
+    }
+
+    @Test
+    public void givenACar_whenUpdateCarIsCalled_thenShouldReturnCarFromService() {
+        // Arrange
+        Car expected = new Car("vin1", "Honda", 2008, "Green");
+        when(carService.updateCar(expected)).thenReturn(expected);
+
+        // Act
+        Car actual = carController.updateCar(expected);
+
+        // Assert
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void givenACarThatDoesNotExistInRepo_whenUpdateCarIsCalled_thenThrowServerException() {
+        // Arrange
+        Car expected = new Car("vin1", "Honda", 2008, "Green");
+        when(carService.updateCar(expected)).thenThrow(new CarNotFoundException());
+
+        // Act/Assert
+        assertThrows(ServerException.class, () -> carController.updateCar(expected));
+    }
 }

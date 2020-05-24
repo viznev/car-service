@@ -53,4 +53,12 @@ public class CarController {
             throw new ServerException();
         }
     }
+
+    public Car updateCar(Car car) {
+        try {
+            return carService.updateCar(car);
+        } catch (CarNotFoundException e) {
+            throw new ServerException();
+        }
+    }
 }

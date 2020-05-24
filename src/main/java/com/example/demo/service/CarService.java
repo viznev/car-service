@@ -46,4 +46,8 @@ public class CarService {
             throw new CarNotFoundException();
         }
     }
+
+    public Car updateCar(Car car) {
+        return null;
+    }
 }
