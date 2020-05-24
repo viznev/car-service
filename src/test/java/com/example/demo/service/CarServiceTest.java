@@ -235,4 +235,39 @@ public class CarServiceTest {
         // Act/Assert
         assertThrows(CarNotFoundException.class, () -> this.carService.findCar(vin));
     }
+
+    /*
+    DELETE
+    given a vin:
+        if vin in repo:
+            delete the entity
+        else:
+            throwCarNotFoundException
+
+    givenAVin_thenCarRepositoryDeleteShouldBeCalled
+    givenAVinThatDoesNotExistInRepo_thenThrowsCarNotFoundException
+     */
+
+    @Test
+    public void givenAVin_whenDeleteCarIsCalled_thenCarRepositoryDeleteShouldBeCalled() {
+        // Arrange
+        String vin = "vin1";
+        Car car = new Car("vin1", "Honda", 2008, "Grey");
+        when(carRepository.findById(vin)).thenReturn(Optional.of(car));
+
+        // Act
+        carService.deleteCar(vin);
+
+        // Assert
+        verify(carRepository).deleteById(vin);
+    }
+
+    @Test
+    public void givenAVinThatDoesNotExistInRepo_whenDeleteCarIsCalled_thenThrowsCarNotFoundException() {
+        // Arrange
+        String vin = "vin1";
+
+        // Act/Assert
+        assertThrows(CarNotFoundException.class, () -> this.carService.deleteCar(vin));
+    }
 }

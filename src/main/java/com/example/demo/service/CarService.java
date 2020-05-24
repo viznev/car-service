@@ -40,5 +40,10 @@ public class CarService {
     }
 
     public void deleteCar(String vin) {
+        if (carRepository.findById(vin).isPresent()) {
+            carRepository.deleteById(vin);
+        } else {
+            throw new CarNotFoundException();
+        }
     }
 }

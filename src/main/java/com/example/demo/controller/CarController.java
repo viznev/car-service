@@ -42,7 +42,8 @@ public class CarController {
         }
     }
 
-    public void deleteCar(String vin) {
+    @DeleteMapping("/{vin}")
+    public void deleteCar(@PathVariable String vin) {
         if (vin.isEmpty()) {
             throw new ServerException();
         }
